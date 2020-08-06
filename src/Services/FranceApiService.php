@@ -19,17 +19,20 @@ class FranceApiService
         $this->redirectUri  = $_ENV['REDIRECT_URI'];
         $this->metadataUrl  = $_ENV['METADATA_URL'];
     }
+    
 
     public function buildAuthorizeUrl()
     {
         $this->session->set('state', bin2hex(random_bytes(5)));
+        $this->session->set('nonce', bin2hex(random_bytes(5)));
         $metadata = $this->httpRequest($this->metadataUrl);
         $url = $metadata->authorization_endpoint . '?' . http_build_query([
             'response_type' => 'code',
             'client_id' => $this->clientId,
             'redirect_uri' => $this->redirectUri,
             'scope' => 'openid email profile ',
-            'state' => $this->session->get('state')
+            'state' => $this->session->get('state'),
+            'nonce' => $this->session->get('nonce')
         ]);
         return $url;
     }
