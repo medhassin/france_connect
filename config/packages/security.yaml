@@ -1,0 +1,15 @@
+security:
+    providers:
+        database:
+            entity: { class: App\Entity\User, property: email }
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            pattern: ^/
+            logout:
+                path: logout
+    access_control:
+        - { path: ^/personal, roles: ROLE_USER }
